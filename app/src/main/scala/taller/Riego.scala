@@ -120,6 +120,15 @@ object Riego {
   def validarProgRiego(pi: ProgRiego, n: Int): Boolean =
     pi.length == n && pi.toSet == (0 until n).toSet
 
+  /**
+   * 2.4.1 costoRiegoTablón (formal)
+   * @param i índice del tablón
+   * @param f finca
+   * @param pi programación de riego (vector donde pi(turno) = índice de tablón que riega en ese turno)
+   * @return costo entero según la fórmula del enunciado
+   */
+  def costoRiegoTablon(i: Int, f: Finca, pi: ProgRiego): Int = {}
+
 
   // EJEMPLO DE MAIN PARA VER COMO ESTA FUNCIONANDO EL CODIGO
 
@@ -146,6 +155,7 @@ object Riego {
     println("\n" + "=" * 60)
     println("=" * 60)
   }
+
 
 
 }
