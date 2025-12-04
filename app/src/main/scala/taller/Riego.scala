@@ -44,7 +44,7 @@ object Riego {
   }
   // Generamos una matriz de distancia con el Random pero ahora dado
   def distanciaAlAzarconRandom(r: Random, long: Int): Distancia = { // Aqui tambien implementamos el generar distancias
-    val v = Vector.fill(long, long)(r.nextInt(long * 3) * 1)
+    val v = Vector.fill(long, long)(r.nextInt(long * 3) + 1)
     Vector.tabulate(long, long)((i, j) =>
     if (i == j) 0
     else if (i < j) v(i)(j)
@@ -120,6 +120,32 @@ object Riego {
   def validarProgRiego(pi: ProgRiego, n: Int): Boolean =
     pi.length == n && pi.toSet == (0 until n).toSet
 
+
+  // EJEMPLO DE MAIN PARA VER COMO ESTA FUNCIONANDO EL CODIGO
+
+  def main(args: Array[String]): Unit = {
+    println("=" * 60)
+    println("PROYECTO DE RIEGO PRIMERA PARTE")
+    println("=" * 60)
+
+    // Ejemplo con 3 tablones (pequeño)
+    println("\n EJEMPLO CON 3 TABLONES")
+    val f1 = fincaAlAzarconRandom(new Random(42), 3)
+    println(mostrarFinca(f1))
+    // Mostramos la matriz de distancia
+    println("\n MATRIZ DE DISTANCIAS")
+    val d1 = distanciaAlAzarconRandom(new Random(42), 3)
+    println(mostrarDistancias(d1))
+    // Mostramos el tiempo de inicio de riego
+    println("\n TIEMPO DE INICIO DE RIEGO")
+    val pi1 = Vector(0, 1, 2)
+    val tir1 = tIR(f1, pi1)
+    println(s"Programacion: ${pi1.mkString(", ")}")
+    println(s"Tiempos inicio: ${tir1.mkString(", ")}")
+
+    println("\n" + "=" * 60)
+    println("=" * 60)
+  }
 
 
 }
