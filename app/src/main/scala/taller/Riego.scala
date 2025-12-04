@@ -100,10 +100,25 @@ object Riego {
     rec(0, 0, Vector.fill(f.length)(0))
   }
 
+// VALIDACIONES PARA FINCA, DISTANCIA, PROGRIEGO
 
+  // Validamos que una finca tenga valores razonables
+  def validarFinca(f: Finca): Boolean =
+    f.forall{ case (ts, tr, p) =>
+    ts > 0 && tr > 0 && p > 0 && p <= 4
+    }
 
+  // Validamos que una matriz de distancia sea simetrica y tenga valores razonables
+  def validarDistancias(d: Distancia): Boolean =
+    d.indices.forall(i =>
+      d(i).length == d.length &&
+      d(i)(i) == 0 &&
+      d.indices.forall(j => d(i)(j) == d(j)(i) && d(i)(j) >= 0)
+    )
 
-
+  // Validamos que una programacion sea una permutacion valida
+  def validarProgRiego(pi: ProgRiego, n: Int): Boolean =
+    pi.length == n && pi.toSet == (0 until n).toSet
 
 
 
