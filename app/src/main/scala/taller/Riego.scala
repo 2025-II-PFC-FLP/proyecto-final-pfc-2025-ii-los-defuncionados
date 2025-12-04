@@ -64,6 +64,19 @@ object Riego {
     s"$header\n$rows"
   }
 
+  // Intentamos mostrar las distancias de forma "legible"
+  def mostrarDistancias(d: Distancia): String = {
+    val n = d.length
+    val header = "  |   " + (0 until n).map(i => f"$i%3d").mkString
+    val separator = "---+" + ("----" * n)
+    val rows = d.zipWithIndex.map {case (fila, i) =>
+      f" $i%2d | " + fila.map(v => f"$v%3d").mkString
+    }.mkString("\n")
+    s"$header\n$separator\n$rows"
+  }
+
+
+
 
 
 
