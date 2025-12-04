@@ -1,5 +1,6 @@
 package taller
 
+import scala.annotation.meta.param
 import scala.util.Random
 import scala.annotation.tailrec
 
@@ -15,6 +16,7 @@ object Riego {
   // Es el random que utilizamos en algunas funciones
   val random = new Random()
 
+// 2.1 GENERACION DE ENTRADAS ALEATORIAS
 
   // Generamos una Finca totalmente aleatoria utilizando el random normal
   def fincaAlAzar(long: Int): Finca = // Aqui implementamos el generar numero de tablones. (el parametro long define el numero de tablones)
@@ -50,6 +52,8 @@ object Riego {
     )
   }
 
+// 2.2 EXPLORACION DE ENTRADAS
+
   // Estos son getters para sacar la informacion de componentes concretos de un tablon
   def tsup(f: Finca, i: Int): Int = f(i)._1 // Tiempo de supervivencia
   def treg(f: Finca, i: Int): Int = f(i)._2 // Tiempo de regado
@@ -65,7 +69,7 @@ object Riego {
   }
 
   // Intentamos mostrar las distancias de forma "legible"
-  def mostrarDistancias(d: Distancia): String = {
+  def mostrarDistancias(d: Distancia): String = { // Aqui implementamos las distancias
     val n = d.length
     val header = "  |   " + (0 until n).map(i => f"$i%3d").mkString
     val separator = "---+" + ("----" * n)
@@ -73,6 +77,27 @@ object Riego {
       f" $i%2d | " + fila.map(v => f"$v%3d").mkString
     }.mkString("\n")
     s"$header\n$separator\n$rows"
+  }
+
+
+// 2.3 CALCULO DEL TIEMPO DE INICIO DEL RIEGO
+/*
+  @param // Finca con n tablones (f)
+  @param // Programacion de riego (pi)
+  @return // Vector para t(i) donde este es el tiempo de inicio del tablon i
+*/
+  // Implementamos tIR que nos ayuda a calcular el tiempo de inicio del riego con recursion de coola.
+  def tIR(f: Finca, pi: ProgRiego): TiempoInicioRiego = {
+    @tailrec
+    def rec(idx: Int, tiempoActual: Int, resultado: TiempoInicioRiego): TiempoInicioRiego =
+      if (idx >= pi.length) resultado
+      else {
+        val tablonActual = pi(idx)
+        val nuevoResultado = resultado.updated(tablonActual, tiempoActual)
+        val nuevoTiempo = tiempoActual + treg(f, tablonActual)
+        rec(idx + 1, nuevoTiempo, nuevoResultado)
+      }
+    rec(0, 0, Vector.fill(f.length)(0))
   }
 
 
