@@ -145,6 +145,32 @@ object Riego {
     else p_i * ((t_i + tr_i) - ts_i)
   }
 
+  def costoRiegoFinca(f: Finca, pi: ProgRiego): Int = {
+    require(validarFinca(f), "Finca inválida")
+    require(validarProgRiego(pi, f.length), "ProgRiego inválida")
+    (0 until f.length).map(i => costoRiegoTablon(i, f, pi)).sum
+  }
+
+  /**
+   * 2.4.3 costoMovilidad
+   * Suma las distancias entre tablones consecutivos según la programación pi.
+   * d debe ser matriz simétrica de distancias (validar con validarDistancias).
+   */
+  def costoMovilidad(f: Finca, pi: ProgRiego, d: Distancia): Int = {
+    require(validarProgRiego(pi, f.length), "ProgRiego inválida")
+    require(validarDistancias(d), "Matriz de distancias inválida")
+    val n = pi.length
+    if (n <= 1) 0
+    else {
+      // pi es vector por turno: pi(turn) = tablon
+      (0 until n - 1).map(j => {
+        val a = pi(j)
+        val b = pi(j + 1)
+        d(a)(b)
+      }).sum
+    }
+  }
+
 
   // EJEMPLO DE MAIN PARA VER COMO ESTA FUNCIONANDO EL CODIGO
 
