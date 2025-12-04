@@ -41,13 +41,27 @@ object Riego {
     )
   }
   // Generamos una matriz de distancia con el Random pero ahora dado
-  def distanciaAlAzarconRandom(r: Random, long: Int): Distancia = {
+  def distanciaAlAzarconRandom(r: Random, long: Int): Distancia = { // Aqui tambien implementamos el generar distancias
     val v = Vector.fill(long, long)(r.nextInt(long * 3) * 1)
     Vector.tabulate(long, long)((i, j) =>
     if (i == j) 0
     else if (i < j) v(i)(j)
     else v(j)(i)
     )
+  }
+
+  // Estos son getters para sacar la informacion de componentes concretos de un tablon
+  def tsup(f: Finca, i: Int): Int = f(i)._1 // Tiempo de supervivencia
+  def treg(f: Finca, i: Int): Int = f(i)._2 // Tiempo de regado
+  def prio(f: Finca, i: Int): Int = f(i)._3 // Prioridad
+
+  // Intentamos mostrar la finca de forma "legible"
+  def mostrarFinca(f: Finca): String = {
+    val header = "Tablon | Tiempo_supervivencia | Tiempo_regado | Prioridad\n"
+    val rows = f.zipWithIndex.map {case ((ts, tr, p), i) =>
+    f"   $i%2d    |    $ts%3d    |    $tr%2d    |    $p%1d"
+    }.mkString("\n")
+    s"$header\n$rows"
   }
 
 
