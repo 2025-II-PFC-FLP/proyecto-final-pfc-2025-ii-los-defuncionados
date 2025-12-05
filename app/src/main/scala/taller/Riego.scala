@@ -16,7 +16,7 @@ object Riego {
   // Es el random que utilizamos en algunas funciones
   val random = new Random()
 
-// 2.1 GENERACION DE ENTRADAS ALEATORIAS
+  // 2.1 GENERACION DE ENTRADAS ALEATORIAS
 
   // Generamos una Finca totalmente aleatoria utilizando el random normal
   def fincaAlAzar(long: Int): Finca = // Aqui implementamos el generar numero de tablones. (el parametro long define el numero de tablones)
@@ -25,45 +25,49 @@ object Riego {
         random.nextInt(long) + 1, // Aqui implementamos el generar duracion de riego (Este valor es el tiempo del regado)
         random.nextInt(4) + 1)
     )
+
   // Generamos una Finca usando un Random dado (con el fin de las pruebas que se puedan repetir)
   def fincaAlAzarconRandom(r: Random, long: Int): Finca = // Aqui tambien implementamos el generar numero de tablones.
     Vector.fill(long)(
       (r.nextInt(long * 2) + 1,
         r.nextInt(long) + 1,
-      r.nextInt(4) + 1)
+        r.nextInt(4) + 1)
     )
 
   // Generamos una matriz de distancia simetrica con el Random normal
   def distanciaAlAzar(long: Int): Distancia = { // Aqui implementamos el generar distancias
     val v = Vector.fill(long, long)(random.nextInt(long * 3) + 1)
     Vector.tabulate(long, long)((i, j) =>
-    if (i == j) 0
-    else if (i < j) v(i)(j)
-    else v(j)(i)
+      if (i == j) 0
+      else if (i < j) v(i)(j)
+      else v(j)(i)
     )
   }
+
   // Generamos una matriz de distancia con el Random pero ahora dado
   def distanciaAlAzarconRandom(r: Random, long: Int): Distancia = { // Aqui tambien implementamos el generar distancias
     val v = Vector.fill(long, long)(r.nextInt(long * 3) + 1)
     Vector.tabulate(long, long)((i, j) =>
-    if (i == j) 0
-    else if (i < j) v(i)(j)
-    else v(j)(i)
+      if (i == j) 0
+      else if (i < j) v(i)(j)
+      else v(j)(i)
     )
   }
 
-// 2.2 EXPLORACION DE ENTRADAS
+  // 2.2 EXPLORACION DE ENTRADAS
 
   // Estos son getters para sacar la informacion de componentes concretos de un tablon
   def tsup(f: Finca, i: Int): Int = f(i)._1 // Tiempo de supervivencia
+
   def treg(f: Finca, i: Int): Int = f(i)._2 // Tiempo de regado
+
   def prio(f: Finca, i: Int): Int = f(i)._3 // Prioridad
 
   // Intentamos mostrar la finca de forma "legible"
   def mostrarFinca(f: Finca): String = {
     val header = "Tablon | Tiempo_supervivencia | Tiempo_regado | Prioridad\n"
-    val rows = f.zipWithIndex.map {case ((ts, tr, p), i) =>
-    f"   $i%2d    |    $ts%3d    |    $tr%2d    |    $p%1d"
+    val rows = f.zipWithIndex.map { case ((ts, tr, p), i) =>
+      f"   $i%2d    |    $ts%3d    |    $tr%2d    |    $p%1d"
     }.mkString("\n")
     s"$header\n$rows"
   }
@@ -73,15 +77,15 @@ object Riego {
     val n = d.length
     val header = "  |   " + (0 until n).map(i => f"$i%3d").mkString
     val separator = "---+" + ("----" * n)
-    val rows = d.zipWithIndex.map {case (fila, i) =>
+    val rows = d.zipWithIndex.map { case (fila, i) =>
       f" $i%2d | " + fila.map(v => f"$v%3d").mkString
     }.mkString("\n")
     s"$header\n$separator\n$rows"
   }
 
 
-// 2.3 CALCULO DEL TIEMPO DE INICIO DEL RIEGO
-/*
+  // 2.3 CALCULO DEL TIEMPO DE INICIO DEL RIEGO
+  /*
   @param // Finca con n tablones (f)
   @param // Programacion de riego (pi)
   @return // Vector para t(i) donde este es el tiempo de inicio del tablon i
@@ -97,28 +101,82 @@ object Riego {
         val nuevoTiempo = tiempoActual + treg(f, tablonActual)
         rec(idx + 1, nuevoTiempo, nuevoResultado)
       }
+
     rec(0, 0, Vector.fill(f.length)(0))
   }
 
-// VALIDACIONES PARA FINCA, DISTANCIA, PROGRIEGO
+  // VALIDACIONES PARA FINCA, DISTANCIA, PROGRIEGO
 
   // Validamos que una finca tenga valores razonables
   def validarFinca(f: Finca): Boolean =
-    f.forall{ case (ts, tr, p) =>
-    ts > 0 && tr > 0 && p > 0 && p <= 4
+    f.forall { case (ts, tr, p) =>
+      ts > 0 && tr > 0 && p > 0 && p <= 4
     }
 
   // Validamos que una matriz de distancia sea simetrica y tenga valores razonables
   def validarDistancias(d: Distancia): Boolean =
     d.indices.forall(i =>
       d(i).length == d.length &&
-      d(i)(i) == 0 &&
-      d.indices.forall(j => d(i)(j) == d(j)(i) && d(i)(j) >= 0)
+        d(i)(i) == 0 &&
+        d.indices.forall(j => d(i)(j) == d(j)(i) && d(i)(j) >= 0)
     )
 
   // Validamos que una programacion sea una permutacion valida
   def validarProgRiego(pi: ProgRiego, n: Int): Boolean =
     pi.length == n && pi.toSet == (0 until n).toSet
+
+  /**
+   * 2.4.1 costoRiegoTablón (formal)
+   *
+   * @param i  índice del tablón
+   * @param f  finca
+   * @param pi programación de riego (vector donde pi(turno) = índice de tablón que riega en ese turno)
+   * @return costo entero según la fórmula del enunciado
+   */
+  def costoRiegoTablon(i: Int, f: Finca, pi: ProgRiego): Int = {
+    require(i >= 0 && i < f.length, s"Índice de tablón fuera de rango: $i")
+    require(validarProgRiego(pi, f.length), "ProgRiego inválida")
+    val t = tIR(f, pi) // vector con los tiempos de inicio t(i)
+    val ts_i = tsup(f, i)
+    val tr_i = treg(f, i)
+    val p_i = prio(f, i)
+    val t_i = t(i)
+    if (ts_i - tr_i >= t_i) ts_i - (t_i + tr_i)
+    else p_i * ((t_i + tr_i) - ts_i)
+  }
+
+  def costoRiegoFinca(f: Finca, pi: ProgRiego): Int = {
+    require(validarFinca(f), "Finca inválida")
+    require(validarProgRiego(pi, f.length), "ProgRiego inválida")
+    (0 until f.length).map(i => costoRiegoTablon(i, f, pi)).sum
+  }
+
+  /**
+   * 2.4.3 costoMovilidad
+   * Suma las distancias entre tablones consecutivos según la programación pi.
+   * d debe ser matriz simétrica de distancias (validar con validarDistancias).
+   */
+  def costoMovilidad(f: Finca, pi: ProgRiego, d: Distancia): Int = {
+    require(validarProgRiego(pi, f.length), "ProgRiego inválida")
+    require(validarDistancias(d), "Matriz de distancias inválida")
+    val n = pi.length
+    if (n <= 1) 0
+    else {
+      // pi es vector por turno: pi(turn) = tablon
+      (0 until n - 1).map(j => {
+        val a = pi(j)
+        val b = pi(j + 1)
+        d(a)(b)
+      }).sum
+    }
+  }
+
+  def costoRiegoTablonSimple(duracion: Int, caudal: Double, tarifa: Double): Double = {
+    require(duracion >= 0, "Duración negativa")
+    require(caudal >= 0, "Caudal negativo")
+    require(tarifa >= 0, "Tarifa negativa")
+    duracion.toDouble * caudal * tarifa
+  }
 
 
   // EJEMPLO DE MAIN PARA VER COMO ESTA FUNCIONANDO EL CODIGO
@@ -146,6 +204,7 @@ object Riego {
     println("\n" + "=" * 60)
     println("=" * 60)
   }
+
 
 
 }
