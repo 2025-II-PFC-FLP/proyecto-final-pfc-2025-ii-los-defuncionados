@@ -171,6 +171,13 @@ object Riego {
     }
   }
 
+  def costoRiegoTablonSimple(duracion: Int, caudal: Double, tarifa: Double): Double = {
+    require(duracion >= 0, "Duración negativa")
+    require(caudal >= 0, "Caudal negativo")
+    require(tarifa >= 0, "Tarifa negativa")
+    duracion.toDouble * caudal * tarifa
+  }
+
 
   // EJEMPLO DE MAIN PARA VER COMO ESTA FUNCIONANDO EL CODIGO
 
