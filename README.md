@@ -12,7 +12,7 @@
 | --------------- | ------ | -------------- | ------------------------- |
 | [Estudiante 1]  | 123456 | [Líder/Colab.] | [correo1@institucion.edu] |
 | [Estudiante 2]  | 123457 | [Colaborador]  | [correo2@institucion.edu] |
-| Mariana de los Ángeles Viera Serna | 202569104 | Colaborador | [@institucion.edu] |
+| Mariana de los Ángeles Viera Serna | 202569104 | Colaborador | mariana.viera@correunivalle.edu.co |
 
 ---
 
