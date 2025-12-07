@@ -179,6 +179,54 @@ object Riego {
   }
 
 
+  // 2.5 generacion progrmaciones de riego
+
+  // Esta función genera todas las permutaciones posibles de los tablones
+  def permutaciones(tablas: Vector[Int]): Vector[ProgRiego] = {
+    if (tablas.isEmpty) Vector(Vector())       // Una sola permutación posible
+    else {
+      for {
+        i <- tablas.indices.toVector
+        elem = tablas(i)                       // Tablón fijo
+        resto = tablas.patch(i, Nil, 1)        // Vector sin ese tablón
+        perm <- permutaciones(resto)           // Permutaciones del resto
+      } yield elem +: perm                     // Lo agrego adelante para formar la permutación final
+    }
+  }
+
+  //genera todas las programaciones posibles segun el número de tablones de la finca, basicamente llama a permutaciones con los indices 0..n-1.
+  def generarProgramaciones(f: Finca): Vector[ProgRiego] =
+    permutaciones((0 until f.length).toVector)
+
+  // VALIDACIONES
+  // Verifica que no existan tablones repetidos en una programación comparando la longitud con la version distinct
+  def noRepiteTablones(pi: ProgRiego): Boolean =
+    pi.distinct.length == pi.length
+
+  // Verifica que estén todos los tablones necesarios, comparo el conjunto de la programacion con el conjunto esperado
+  def contieneTodos(f: Finca, pi: ProgRiego): Boolean =
+    pi.toSet == (0 until f.length).toSet
+
+  // 2.6 programacion optima
+
+  // suma costo de riego + costo de movilidad.
+  // encapsulo los dos costos para dejarlos más limpios.
+  def costoTotal(f: Finca, pi: ProgRiego, d: Distancia): Int =
+    costoRiegoFinca(f, pi) + costoMovilidad(f, pi, d)
+
+
+  // Busca la programación de riego con costo mínimo
+  def programacionOptima(f: Finca, d: Distancia): (ProgRiego, Int) = {
+    val todas = generarProgramaciones(f)               // Todas las posibles rutas
+    todas.map(pi => (pi, costoTotal(f, pi, d)))        // Asocio cada ruta con su costo
+      .minBy(_._2)                                     // Me quedo con la de menor costo
+  }
+
+  // Solo retorna la programación óptima sin el costo
+  def mejorRuta(f: Finca, d: Distancia): ProgRiego =
+    programacionOptima(f, d)._1
+
+
   // EJEMPLO DE MAIN PARA VER COMO ESTA FUNCIONANDO EL CODIGO
 
   def main(args: Array[String]): Unit = {
