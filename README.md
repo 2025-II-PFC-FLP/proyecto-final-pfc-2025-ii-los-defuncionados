@@ -1,8 +1,8 @@
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/h71fa0_C)
-# Asignación: [Nombre de la asignación]
+# Asignación: Proyecto Final: Generación y evaluación de rutas de riego con scala
 
-**Fecha:** [DD/MM/AAAA]
-**Curso:** [Nombre del Curso]
+**Fecha:** 09/12/2025
+**Curso:** Fundamentos de programación funcional y concurrente
 
 ---
 
@@ -12,11 +12,10 @@
 | --------------- | ------ | -------------- | ------------------------- |
 | [Estudiante 1]  | 123456 | [Líder/Colab.] | [correo1@institucion.edu] |
 | [Estudiante 2]  | 123457 | [Colaborador]  | [correo2@institucion.edu] |
-| [Estudiante 3]  | 123458 | [Colaborador]  | [correo3@institucion.edu] |
+| Mariana de los Ángeles Viera Serna | 202569104 | Colaborador | [@institucion.edu] |
 
 ---
 
 ## 📌 Descripción de la Asignación
 
-[Breve párrafo explicando el propósito y objetivos del taller (4-6 líneas). Ejemplo:]
-_"Este taller busca analizar [tema principal] mediante [metodología]. Los objetivos incluyen [objetivo 1], [objetivo 2] y [objetivo 3], aplicando conceptos vistos en clase como [concepto relevante]."_
+Este taller busca aplicar los conceptos vistos en la materia para modelar el proceso de riego de una finca mediante programación funcional en Scala. La idea es representar los tablones como posiciones y generar todas las rutas posibles usando permutaciones. Luego se calculan los costos de riego y de movilidad para comparar cada ruta y encontrar cuál es la mejor. El objetivo es practicar el uso de funciones puras, recursividad, manejo de colecciones, búsqueda y pruebas unitarias con scalaTest, asegurando que el programa sea correcto y eficiente para casos diferentes casos
