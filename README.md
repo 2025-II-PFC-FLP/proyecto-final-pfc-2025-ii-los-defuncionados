@@ -8,11 +8,13 @@
 
 ## 👥 Integrantes del Grupo
 
-| Nombre Completo | Código | Rol            | Correo Electrónico        |
-| --------------- | ------ | -------------- | ------------------------- |
-| [Estudiante 1]  | 123456 | [Líder/Colab.] | [correo1@institucion.edu] |
-| [Estudiante 2]  | 123457 | [Colaborador]  | [correo2@institucion.edu] |
-| Mariana de los Ángeles Viera Serna | 202569104 | Colaborador | mariana.viera@correunivalle.edu.co |
+| Nombre Completo                    | Código    | Rol          | Correo Electrónico                  |
+|------------------------------------|-----------| ------------ |-------------------------------------|
+| Náthalie Wilches Tamayo                  | 202569482 | [Líder/Colab.] | nathalie.wilches@correounivalle.edu.co           |
+| Dilan Joseph Sanchez Silva         | 202380492 | Colaborador  | sanchez.dilan@correounivalle.edu.co |
+| Mariana de los Ángeles Viera Serna | 202569104 | Colaborador | mariana.viera@correunivalle.edu.co  |
+| Santiago Andrey Morales Valencia | 202380753 | Colaborador | Santiago.andrey.morales@correounivalle.edu.co  |
+
 
 ---
 
