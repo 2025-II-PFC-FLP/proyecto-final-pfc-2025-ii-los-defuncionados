@@ -1,0 +1,120 @@
+\documentclass[12pt]{article}
+
+% Paquetes básicos
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{setspace}
+\usepackage{float}
+
+% Configuración
+\geometry{letterpaper, margin=1in}
+\setstretch{1.3}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    urlcolor=blue,
+    citecolor=blue
+}
+
+% Inicio del documento
+\begin{document}
+
+% -------------------------------
+% PORTADA
+% -------------------------------
+    \begin{titlepage}
+        \centering
+        {\Huge \textbf{Informe final del taller de riego en scala}}\\ [0.5cm]
+
+        {\Large Curso: Programación funcional y concurrente}\\[0.5cm]
+        {\Large Estudiantes: Mariana de los Ángeles Viera Serna - 202569104}\\[0.5cm]
+        {\Large Fecha: 9/diciembre/2025]}\ [2cm]
+
+        \vfill
+    \end{titlepage}
+
+    \tableofcontents
+    \newpage
+
+% -------------------------------
+    \section{Introducción}
+    El presente informe describe el trabajo desarrollado para el taller de riego, implementado en Scala siguiendo los principios de la programación funcional. El objetivo del taller es modelar y analizar diferentes algoritmos para programaciones de riego, incluyendo la generación de permutaciones válidas, la construcción de rutas óptimas y la evaluación de costos.
+
+    Este trabajó recoge el proceso, el análisis, resultados obtenidos y reflexiones personales respecto al desarrollo del proyecto, integrando la teoría vista en clase.
+
+% -------------------------------
+    \section{Descripción del problema}
+    El taller plantea el diseño de funciones para modelar una finca compuesta por varios tablones, cada uno con distintos tiempos de riego. A partir de estos datos deben generarse todas las rutas válidas de riego, calcular costos asociados a movilidad y tiempo, y encontrar la programación óptima según criterios específicos.
+
+    Además, se evalúan las soluciones mediante pruebas unitarias y se implementan versiones paralelas para medir su rendimiento.
+
+% -------------------------------
+    \section{Metodología}
+    Para resolver el problema, se siguió una metodología basada en los siguientes pasos:
+
+    \begin{enumerate}[label=\textbf{\arabic*.}]
+        \item Revisamos los requisitos del taller y dividimos el trabajo entre los integrantes.
+        \item Diseñamos las funciones principales de forma modular, usando funciones puras y algunas de alto orden.
+        \item Generamos todas las posibles rutas de riego mediante funciones recursivas y estructuras inmutables.
+        \item Creamos funciones para calcular los costos de riego y los costos de movimiento entre tablones.
+        \item Implementamos la búsqueda de la mejor ruta según los criterios del taller.
+        \item Hicimos pruebas unitarias para comprobar que cada parte del programa funcionara correctamente.
+        \item Paralelizamos algunas funciones para comparar el rendimiento entre la versión normal y la versión paralela.
+    \end{enumerate}
+
+
+% -------------------------------
+    \section{Resultados}
+    Los principales resultados obtenidos incluyen:
+
+    \begin{itemize}
+        \item Generación correcta de todas las permutaciones válidas de riego.
+        \item Validación de rutas sin repetición y con todos los tablones presentes.
+        \item Implementación funcional del cálculo del costo total.
+        \item Obtención de la programación óptima según tiempos y movilidad.
+        \item Comparaciones de rendimiento entre ejecución secuencial y paralela.
+    \end{itemize}
+
+% -------------------------------
+    \section{Análisis y discusión}
+    Durante el desarrollo notamos que las funciones de alto orden ayudan a organizar mejor el código, haciéndolo más claro y modular. El uso de datos inmutables también resultó muy útil, ya que evita problemas de cambios inesperados y hace más fácil trabajar con paralelización.
+
+    Una parte importante fue generar todas las rutas posibles. Como este proceso crece muy rápido en complejidad, fue necesario buscar formas de optimizar y medir tiempos con diferentes tamaños de entrada.
+
+    Finalmente, comprobamos que es posible encontrar la mejor programación usando funciones combinatorias, aprovechando que scala permite trabajar con colecciones de forma muy clara y declarativa.
+% -------------------------------
+    \section{Conclusiones}
+    Se logró implementar correctamente el sistema de programación de riego usando el enfoque funcional. Gracias a las funciones puras, las colecciones inmutables y las funciones de alto orden, el código fue más claro, fácil de entender y se pudo comprobar su funcionamiento con pruebas unitarias.
+
+    La versión paralela presentó mejoras en tiempos cuando se usaron entradas medianas, lo que demuestra la importancia de conocer cómo funciona el paralelismo dentro de la programación funcional.
+
+    En general, este taller ayudó a reforzar los conceptos vistos en clase y a practicar su aplicación real en scala.
+
+% -------------------------------
+    \section{Dificultades encontradas}
+    Entre las principales dificultades del proyecto se destacan:
+
+    \begin{itemize}
+        \item Mariana Viera: Durante el desarrollo del proyecto surgieron varias dificultades. Una de las principales fue el problema con las pruebas unitarias, ya que al inicio no se estaban ejecutando correctamente. Yo pienso que esto se debió a errores en la configuración del paquete de pruebas y a que algunas funciones no estaban bien conectadas con los test. Esto  tomó tiempo porque había que revisar nombres de archivos, rutas, imports y actualizar los métodos para que coincidan exactamente con lo que esperaba el test.
+
+        También hubo dificultades en la parte que me correspondía. Ya que generar y analizar las rutas posibles fue retador, especialmente porque manejar permutaciones tiene una complejidad alta y era fácil equivocarse, ademas hay entender cómo funcionan las funciones de alto orden aplicadas a este problema llevó tiempo, ya que debíamos asegurarnos de mantener el código limpio y funcional
+
+        Finalmente integrar todas las partes en un solo proyecto también presentó retos, porque cualquier cambio pequeño podía afectar lo demás, especialmente con la inmutabilidad y la recursión.
+    \end{itemize}
+
+% -------------------------------
+    \section{Referencias}
+    \begin{itemize}
+        \item Apuntes de clase – Programación Funcional
+        \item Documentación oficial de Scala: \url{https://docs.scala-lang.org}
+        \item Material complementario proporcionado por el profesor
+    \end{itemize}
+
+% -------------------------------
+\end{document}
