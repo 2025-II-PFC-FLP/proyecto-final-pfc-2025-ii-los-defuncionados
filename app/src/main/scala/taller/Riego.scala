@@ -227,7 +227,7 @@ object Riego {
     programacionOptima(f, d)._1
 
 
-  // EJEMPLO DE MAIN PARA VER COMO ESTA FUNCIONANDO EL CODIGO
+  /*EJEMPLO DE MAIN PARA VER COMO ESTA FUNCIONANDO EL CODIGO
 
   def main(args: Array[String]): Unit = {
     println("=" * 60)
@@ -253,6 +253,7 @@ object Riego {
     println("=" * 60)
   }
 
+  */
 
 
 }
