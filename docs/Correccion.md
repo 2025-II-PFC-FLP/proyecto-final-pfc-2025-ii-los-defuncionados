@@ -1,3 +1,188 @@
+**Fundamentos de Programación Funcional y Concurrente**
+# Argumentación de corrección de los algoritmos implementados
+
+En esta sección se argumenta que los algoritmos implementados en riego.scala son correctos con respecto a su especificación.
+La corrección se demuestra usando inducción estructural, notación matemática y llamados explícitos de los algoritmos.
+
+________________________________________________________________________________________
+### 1. Corrección de la función permutaciones
+
+def permutaciones(tablas: Vector[Int]): Vector[ProgRiego]
+
+Debe generar todas las permutaciones posibles del vector de tablones.
+Formalmente, queremos demostrar:
+
+$$
+\forall T \in \text{List}[\text{Int}] :\ \text{permutaciones}(T) = \mathrm{Perm}(T)
+$$
+
+donde Perm(t) es el conjunto matemático de todas las permutaciones de t
+
+
+#### 1.1 Caso base 
+Si el vector es vacío:
+if (tablas.isEmpty) Vector(Vector())
+
+Entonces:
+$$\mathrm{Perm}([]) = \{ [] \}$$
+
+Esto coincide con la definición matemática: el conjunto de permutaciones de la lista vacía es una lista vacía única
+
+#### 1.2 Caso inductivo 
+Supongamos que la función es correcta para listas de tamaño k:
+
+permutaciones(Tk)=Perm(Tk)
+
+Queremos demostrar que es correcta para una lista de tamaño k+1:
+
+```scala
+for {
+i <- tablas.indices
+elem = tablas(i)
+resto = tablas.patch(i, Nil, 1)
+perm <- permutaciones(resto)
+} yield elem +: perm
+```
+
+Matemáticamente, esto corresponde a:
+
+$$
+\mathrm{Perm}(T) = \bigcup_{x \in T} \{\, x :: P \mid P \in \mathrm{Perm}(T \setminus \{x\}) \,\}
+$$
+
+Esta es exactamente la definición recursiva de permutaciones.
+
+- La función toma cada elemento,
+
+- genera las permutaciones del resto (hipótesis inductiva),
+
+- y lo agrega al inicio, obteniendo todas las combinaciones posibles.
+
+Por lo tanto:
+
+P(Tk+1)=Perm(Tk+1)
+
+La función es correcta
+
+### 2. Corrección de generarProgramaciones
+
+def generarProgramaciones(f: Finca): Vector[ProgRiego] =
+permutaciones((0 until f.length).toVector)
+
+Esta función simplemente genera el vector:
+[0,1,2,…,n−1]
+
+y usa permutaciones para obtener todas las rutas posibles.
+
+generarProgramaciones(f)=Perm({0,…,n−1})
+
+### 3. Corrección de validaciones
+
+#### 3.1 noRepiteTablones
+
+pi.distinct.length == pi.length
+
+Matemáticamente: 
+
+$$
+\text{noRepiteTablones}(\pi) \;\equiv\; |\text{unique}(\pi)| = |\pi|
+$$
+
+Esto es verdadero solo si no hay elementos repetidos.
+
+#### 3.2 contieneTodos
+
+pi.toSet == (0 until f.length).toSet
+
+Demuestra:
+
+Set(π)={0,…,n−1}
+
+Es decir que la ruta incluye todos los tablones y exactamente una vez
+
+### 4. Corrección del cálculo de costos
+
+#### 4.1 Costo total 
+costoTotal = costoRiegoFinca + costoMovilidad
+
+$$\mathrm{CostoTotal}(\pi)
+= \sum_{i \in \pi} f.\mathrm{tIR}(i)
+\;+\;
+\sum_{(a,b) \in \mathrm{pares}(\pi)} d(a,b)
+$$
+
+primer término = costo de riego
+segundo término = costo de moverse entre tablones consecutivos
+
+### 5. Corrección de programacionOptima
+
+```scala
+val todas = generarProgramaciones(f)
+todas.map(pi => (pi, costoTotal(f, pi, d))).minBy(_._2)
+```
+Se quiere demostrar que selecciona la programación con menor costo:
+
+$$
+\mathrm{Opt}(f) = \arg\!\min_{\pi \in \mathrm{Perm}(T)} \mathrm{CostoTotal}(\pi)
+$$
+
+El algoritmo:
+
+- genera todas las rutas
+
+- calcula costoTotal para cada una 
+
+- aplica minBy (devuelve la pareja con el costo mínimo)
+
+Esto cumple: 
+
+$$
+(\pi_{\text{opt}},\, c_{\text{opt}})
+= \min_{\pi \in \mathrm{Perm}(T)} \mathrm{CostoTotal}(\pi)
+$$
+
+
+### 6. Conclusion formal
+Usando inducción estructural y definiciones matemáticas, demostramos:
+
+$$
+\forall f, d:\
+\mathrm{programacionOptima}(f,d)
+= \arg\!\min_{\pi \in \mathrm{Perm}(f)} \mathrm{CostoTotal}(\pi)
+$$
+
+La función permutaciones es correcta por definición recursiva
+- La generación de programaciones es correcta por composición
+- Las validaciones son correctas por teoría de conjuntos
+- El cálculo de costos corresponde exactamente a la especificación
+- La selección de la mejor ruta es correcta usando búsqueda exhaustiva
+
+### 7. Llamados explícitos como parte de la demostración
+```scala
+Finca(Vector(3,1,4))
+```
+
+T=[0,1,2]
+
+Perm(T)=[0,1,2],[0,2,1],[1,0,2],[1,2,0],[2,0,1],[2,1,0]
+
+Para cada ruta se calcula:
+
+CostoTotal(pi)
+
+Ejemplo: 
+
+π=[0,2,1]
+
+Riego=3+4+1=8
+
+Movilidad=∣0−2∣+∣2−1∣=2+1=3
+
+CostoTotal=11
+
+El algoritmo revisa todas las rutas y escoge la menor
+
+________________________________________________________________________
 # Ejemplo informe de corrección
 
 **Fundamentos de Programación Funcional y Concurrente**  
@@ -5,7 +190,10 @@ Documento realizado por el docente Juan Francisco Díaz.
 
 ---
 
+
 ## Argumentación de corrección de programas
+
+
 
 ### Argumentando sobre corrección de programas recursivos
 
@@ -188,4 +376,4 @@ Por inducción, al llegar al estado final, \$max = f(L)\$.
 
 $$
 P_f(L) == f(L)
-$$
+$$_
