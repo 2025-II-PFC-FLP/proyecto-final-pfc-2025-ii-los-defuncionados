@@ -1,5 +1,121 @@
-q
 
+# Algoritmo de programación optima en sistemas de riego
+<!-- Aqui toca hacer una introduccion general y los temas antes -->
+______________________________________________________________
+### 1. Permutaciones: generación de todas las rutas
+
+### Definicion de algoritmo
+```Scala
+def permutaciones(tablas: Vector[Int]): Vector[ProgRiego] = {
+if (tablas.isEmpty) Vector(Vector())
+else {
+for {
+i <- tablas.indices.toVector
+elem = tablas(i)
+resto = tablas.patch(i, Nil, 1)
+perm <- permutaciones(resto)
+} yield elem +: perm
+}
+}
+```
+Explicación del proceso
+
+Si el vector está vacío - solo existe una permutación: Vector().
+
+En caso contrario:
+
+- Se recorre cada índice
+- Se toma un tablón como fijo
+- Se generan las permutaciones del resto 
+- Se pone el elemento fijo a cada permutación generada
+
+Este diseño sigue la definición matemática recursiva estándar de permutaciones
+
+### 2. Generación de programaciones
+
+```Scala
+def generarProgramaciones(f: Finca): Vector[ProgRiego] =
+permutaciones((0 until f.length).toVector)
+```
+
+- Representa la finca como índices [0, 1, ..., n−1].
+
+- Luego obtiene todas sus permutaciones.
+
+### 3. Validaciones
+
+#### 3.1 No hay tablones repetidos
+```Scala
+def noRepiteTablones(pi: ProgRiego): Boolean =
+pi.distinct.length == pi.length
+```
+Garantiza unidad mediante operaciones de conjuntos
+
+#### 3.2 Se incluyen todos los tablones
+```Scala
+def contieneTodos(f: Finca, pi: ProgRiego): Boolean =
+pi.toSet == (0 until f.length).toSet
+```
+Verifica igualdad entre conjuntos
+
+
+#### 4. Cálculo de costos
+```Scala
+def costoTotal(f: Finca, pi: ProgRiego, d: Distancia): Int = {
+costoRiegoFinca(f, pi) + costoMovilidad(f, pi, d)
+```
+Separar los costos cumple el principio funcional de composición de funciones puras.
+
+Formula formal:
+
+$$
+\mathrm{CostoTotal}(\pi)
+= \sum_{i \in \pi} f.\mathrm{tIR}(i)
+\;+\;
+\sum_{(a,b) \in \mathrm{pares}(\pi)} d(a,b)
+$$
+
+#### 5. Programación optima
+```Scala
+val todas = generarProgramaciones(f)
+todas.map(pi => (pi, costoTotal(f, pi, d))).minBy(_._2)
+```
+
+Proceso:
+
+- Genera todas las rutas posibles
+- Calcula costoTotal para cada ruta
+- Selecciona la de mínimo costo
+
+#### 6. Integración de conceptos vistos en clase
+- Recursión 
+- Funciones puras
+- Funcional: uso de map, distinct, flatMap, minBy
+- Declaratividad
+- Búsqueda en espacios discretos 
+- Composición funcional
+
+#### 7. Ejemplo con datos reales
+Finca:
+
+```Scala
+Finca(Vector(3,1,4))
+```
+T = [0,1,2]
+Perm(T) → 6 rutas posibles.
+
+Ejemplo de cálculo:
+
+π = [0,2,1]
+
+Riego = 3 + 4 + 1 = 8
+
+Movilidad = |0-2| + |2-1| = 2 + 1 = 3
+
+CostoTotal = 11
+
+<!-- ahí dejé el resto del ejemplo, toca borrarlo -->
+________________________________________________________________________________
 # Informe de proceso Algoritmo Factorial con Recursión de Cola
 
 ## Definición del Algoritmo

@@ -19,7 +19,6 @@ class RiegoTest extends AnyFunSuite {
 
   type ProgRiego = Vector[Int]
 
-
   // 2.5 Generación de programaciones
   // Genera todas las permutaciones posibles del vector de tablones.
   // Esto me permite obtener todas las rutas válidas de riego.
