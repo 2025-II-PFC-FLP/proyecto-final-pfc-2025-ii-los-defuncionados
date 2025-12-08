@@ -31,11 +31,6 @@ class RiegoTest extends AnyFunSuite {
     rec(0, 0, Vector.fill(f.length)(0))
   }
 
-  // Distancia como función
-  type Distancia = (Int, Int) => Int
-  // Programación de riego
-  type ProgRiego = Vector[Int]
-
   // -----------------------------
   // Pruebas 2.4.1 – costoRiegoTablonSimple
   // -----------------------------
@@ -91,7 +86,7 @@ class RiegoTest extends AnyFunSuite {
   def permutaciones(tablas: Vector[Int]): Vector[ProgRiego] =
     if (tablas.isEmpty) Vector(Vector())
     else tablas.flatMap(t =>
-      permutaciones(tablas.filter(_ != t)).map(t +: _)
+      permutaciones(tablas.filter(_ != t)).map(t +: _))
                         
   def validarFinca(f: Finca): Boolean =
     f.forall { case (ts, tr, p) => ts > 0 && tr > 0 && p > 0 && p <= 4 }
