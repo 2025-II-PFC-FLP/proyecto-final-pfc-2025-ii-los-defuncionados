@@ -16,8 +16,56 @@ class RiegoTest extends AnyFunSuite {
   // Distancia como función
   type Distancia = (Int, Int) => Int
   // Programación de riego
-
   type ProgRiego = Vector[Int]
+
+  // -----------------------------
+  // Pruebas 2.4.1 – costoRiegoTablonSimple
+  // -----------------------------
+
+  test("Caudal pequeño") {
+    val dur = 10
+    val caudal = 0.1
+    val tarifa = 50.0
+    val expected = dur * caudal * tarifa
+    val result = Riego.costoRiegoTablonSimple(dur, caudal, tarifa)
+    assert(result == expected)
+  }
+
+  test("Caudal grande") {
+    val dur = 8
+    val caudal = 10.0
+    val tarifa = 120.0
+    val expected = dur * caudal * tarifa
+    val result = Riego.costoRiegoTablonSimple(dur, caudal, tarifa)
+    assert(result == expected)
+  }
+
+  test("Duración mínima (0)") {
+    val dur = 0
+    val caudal = 3.0
+    val tarifa = 80.0
+    val expected = 0.0
+    val result = Riego.costoRiegoTablonSimple(dur, caudal, tarifa)
+    assert(result == expected)
+  }
+
+  test("Duración máxima razonable") {
+    val dur = 24
+    val caudal = 2.5
+    val tarifa = 75.0
+    val expected = dur * caudal * tarifa
+    val result = Riego.costoRiegoTablonSimple(dur, caudal, tarifa)
+    assert(result == expected)
+  }
+
+  test("Combinación aleatoria") {
+    val dur = 7
+    val caudal = 3.25
+    val tarifa = 99.5
+    val expected = dur * caudal * tarifa
+    val result = Riego.costoRiegoTablonSimple(dur, caudal, tarifa)
+    assert(result == expected)
+  }
 
   // 2.5 Generación de programaciones
   // Genera todas las permutaciones posibles del vector de tablones.
