@@ -145,7 +145,7 @@ Verificar que $\forall i \in \{0, \ldots, n-1\}$:
 $$ts^F_i > 0 \land tr^F_i > 0 \land 1 \leq p^F_i \leq 4$$
 
 **Conclusión:** validarFinca es correcta por definición del cuantificador universal.
-### 5.cCorreción de las funciones de validacion (Distancias)
+### 5. Correción de las funciones de validacion (Distancias)
 ```scala 
 def validarDistancias(d: Distancia): Boolean =
   d.indices.forall(i =>
@@ -187,6 +187,154 @@ Si $f_1$ y $f_2$ difieren solo en la fuente de aleatoriedad pero mantienen la mi
    * `validarDistancias` : Correcta por verificación exhaustiva de propiedades matriciales.
    * `validarProgRiego` : Correcta por teoría de conjuntos
 * **Versiones con random parametrizado:** Correctas por equivalencia estructural. 
+
+### 8. Corrección de las funciones de costo
+
+En esta sección se presenta la corrección parcial de las funciones asociadas al cálculo de costos del sistema de riego:  
+`costoRiegoTablon`, `costoRiegoFinca`, `costoMovilidad` y `costoRiegoTablonSimple`.  
+La corrección sigue el estilo de verificación formal aplicado en las secciones previas del informe.
+
+---
+
+#### 8.1 Corrección de `costoRiegoTablon`
+
+##### Especificación formal
+
+Entrada:
+
+- `i ∈ ℕ` tal que `0 ≤ i < length(f)`
+- `f: Finca = Vector[(ts, tr, p)]`, con
+    - `ts > 0`
+    - `tr > 0`
+    - `1 ≤ p ≤ 4`
+- `pi: ProgRiego`, siendo una permutación de `[0..n-1]`
+
+Salida:
+
+- Entero correspondiente al costo de riego del tablón *i* según la fórmula:
+
+$$
+costo(i) =
+\begin{cases}
+ts_i - (t_i + tr_i) & \text{si } ts_i - tr_i \ge t_i \\
+p_i \cdot ((t_i + tr_i) - ts_i) & \text{en otro caso}
+\end{cases}
+$$
+
+
+donde
+- `t = tIR(f, pi)`
+- `t_i = t(i)`
+- `ts_i = tsup(f, i)`
+- `tr_i = treg(f, i)`
+- `p_i = prio(f, i)`.
+
+##### Corrección parcial
+
+**1. Verificación de precondiciones**
+
+Las primeras líneas del código son:
+
+
+```scala
+require(i >= 0 && i < f.length)
+require(validarProgRiego(pi, f.length))
+```
+---
+
+#### 8.2 Corrección de `costoRiegoFinca`
+
+##### Especificación formal
+
+Entrada:
+
+- Una finca `f` válida, es decir, cada tablón cumple:
+    - `ts > 0`
+    - `tr > 0`
+    - `1 ≤ p ≤ 4`
+- Una programación `pi` válida, es decir, `pi` es una permutación de los índices `0..n-1`.
+
+Salida:
+
+- Un entero que representa el costo total de riego de la finca, definido como la suma del costo individual de cada tablón:
+
+$$
+costoTotal(f, \pi) = \sum_{i=0}^{n-1} costoRiegoTablon(i, f, \pi)
+$$
+
+##### Corrección parcial
+
+El código de la función es:
+
+```scala
+(0 until f.length).map(i => costoRiegoTablon(i, f, pi)).sum
+```
+
+---
+
+#### 8.3 Corrección de `costoMovilidad`
+
+##### Especificación formal
+
+Entrada:
+
+- Una finca `f` con `n` tablones.
+- Una programación de riego `pi`, válida y sin repetición de índices.
+- Una matriz de distancias `d`, simétrica y válida, donde:
+    - `d(i)(i) = 0`
+    - `d(i)(j) = d(j)(i)`
+    - `d(i)(j) ≥ 0`
+
+Salida:
+
+- Un entero que representa la suma de las distancias entre tablones consecutivos según el orden definido por `pi`.
+
+Formalmente:
+
+$$
+costoMovilidad(f, \pi, d) =
+\sum_{j=0}^{n-2} d(\pi(j))(\pi(j+1))
+$$
+
+##### Corrección parcial
+
+La función implementa:
+
+```scala
+(0 until n - 1).map(j => {
+  val a = pi(j)
+  val b = pi(j + 1)
+  d(a)(b)
+}).sum
+```
+
+---
+
+#### 8.4 Corrección de `costoRiegoTablonSimple`
+
+##### Especificación formal
+
+Entrada:
+
+- `duracion ≥ 0`
+- `caudal ≥ 0`
+- `tarifa ≥ 0`
+
+Salida:
+
+Un número real correspondiente al costo total del riego simple, definido como:
+
+$$
+costo = duracion \times caudal \times tarifa
+$$
+
+##### Corrección parcial
+
+El código es:
+
+```scala
+duracion.toDouble * caudal * tarifa
+```
 
 ### 1. Corrección de la función permutaciones
 

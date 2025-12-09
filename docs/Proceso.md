@@ -1,3 +1,148 @@
+# Algoritmo de programación funciones de costo
+
+<!-- Aqui toca hacer una introduccion general y los temas antes -->
+______________________________________________________________
+### 9.1 Proceso de la función `tIR`
+
+La función `tIR` calcula el tiempo de inicio de riego de cada tablón siguiendo el orden indicado por la programación `pi`.  
+Este proceso se implementa mediante **recursión de cola**, acumulando el tiempo total transcurrido hasta cada turno.
+
+---
+
+#### Descripción operacional
+
+`tIR(f, pi)` funciona de la siguiente forma:
+
+1. Se inicia con tiempoActual = 0.
+2. En cada turno `idx`:
+  - Se identifica el tablón actual: `tablon = pi(idx)`.
+  - Se asigna `t(tablon) = tiempoActual`.
+  - Se suma el tiempo de riego del tablón (`treg(f, tablon)`) al tiempo actual.
+3. La recursión continúa mientras queden turnos por procesar.
+4. Cuando `idx` alcanza la longitud de `pi`, se devuelve el vector final.
+
+---
+
+#### Ejemplo de ejecución
+
+Considere:
+
+```text
+F = Vector(
+  (5,2,3),   // Tablón 0
+  (4,1,1),   // Tablón 1
+  (6,3,2)    // Tablón 2
+)
+
+pi = Vector(0,2,1)
+```
+
+Evolución del proceso:
+
+| Iteración | idx | tablón | tiempoActual | nuevoTiempo | vectorTiempos |
+|-----------|-----|--------|--------------|-------------|----------------|
+| 0         | 0   | 0      | 0            | 2           | [0,0,0]        |
+| 1         | 1   | 2      | 2            | 5           | [0,0,2]        |
+| 2         | 2   | 1      | 5            | 6           | [0,5,2]        |
+
+Resultado final:
+
+```scala
+tIR(F, pi) = [0, 5, 2]
+```
+
+---
+
+#### Pila de llamadas (diagrama)
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant Main
+    participant tIR
+    participant rec
+
+    Main->>tIR: tIR(f, pi)
+    tIR->>rec: rec(idx=0, tiempo=0, vector=[0,0,0])
+    rec->>rec: rec(idx=1, tiempo=2, vector=[0,0,0])
+    rec->>rec: rec(idx=2, tiempo=5, vector=[0,0,2])
+    rec-->>tIR: [0,5,2]
+    tIR-->>Main: [0,5,2]
+```
+---
+
+### 9.2 Proceso de la función `costoRiegoTablon`
+
+La función `costoRiegoTablon` calcula el costo individual de un tablón según:
+- su tiempo de supervivencia,
+- su tiempo de riego,
+- su prioridad,
+- y el tiempo en que realmente empieza a regarse (obtenido desde `tIR`).
+
+Este proceso involucra una llamada interna importante: **tIR**, la cual es recursiva. Por lo tanto, el proceso total de `costoRiegoTablon` incluye tanto su propia lógica como la ejecución interna de `tIR`.
+
+---
+
+#### Entradas del ejemplo
+
+Usamos la misma finca y programación que en la sección anterior (para mantener coherencia):
+
+```text
+F = Vector(
+  (5,2,3),   // Tablón 0
+  (4,1,1),   // Tablón 1
+  (6,3,2)    // Tablón 2
+)
+
+pi = Vector(0, 2, 1)
+
+```
+---
+
+### 9.3 Proceso de la función `costoRiegoFinca`
+
+La función `costoRiegoFinca` calcula el costo total de riego de una finca sumando el costo individual de cada tablón.  
+Su proceso consiste en:
+
+1. Recorrer todos los índices de la finca.
+2. Llamar a `costoRiegoTablon(i, f, pi)` para cada `i`.
+3. Sumar todos los resultados.
+
+Debido a que cada llamada a `costoRiegoTablon` invoca internamente a `tIR`, el proceso total incluye múltiples ejecuciones del proceso recursivo descrito antes.
+
+---
+
+#### Entradas del ejemplo
+
+Usamos la misma finca y programación:
+
+```text
+F = Vector(
+  (5,2,3),   // Tablón 0
+  (4,1,1),   // Tablón 1
+  (6,3,2)    // Tablón 2
+)
+
+pi = Vector(0, 2, 1)
+```
+
+---
+
+### 9.4 Proceso de la función `costoMovilidad`
+
+La función `costoMovilidad` calcula la suma de las distancias entre tablones consecutivos según la programación de riego `pi`.  
+A diferencia de `tIR` o `costoRiegoTablon`, esta función **no contiene recursión**, sino un recorrido secuencial por pares consecutivos.
+
+---
+
+#### Entradas del ejemplo
+
+Usamos la misma programación para coherencia:
+
+```text
+pi = Vector(0, 2, 1)
+```
+
 
 # Algoritmo de programación optima en sistemas de riego
 <!-- Aqui toca hacer una introduccion general y los temas antes -->
@@ -62,7 +207,7 @@ Verifica igualdad entre conjuntos
 #### 4. Cálculo de costos
 ```Scala
 def costoTotal(f: Finca, pi: ProgRiego, d: Distancia): Int = {
-costoRiegoFinca(f, pi) + costoMovilidad(f, pi, d)
+costoRiegoFinca(f, pi) + costoMovilidad(f, pi, d) }
 ```
 Separar los costos cumple el principio funcional de composición de funciones puras.
 
