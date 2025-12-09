@@ -1,7 +1,5 @@
 package taller
 
-import org.junit.Test
-
 import scala.util.Random
 import org.scalatest.funsuite.AnyFunSuite
 
@@ -124,12 +122,6 @@ class RiegoParaleloTest extends AnyFunSuite {
     val (f, d, pi) = generarEntradas(10, 4001)
     assert(Riego.costoRiegoFinca(f, pi) == RiegoParalelo.costoRiegoFincaPar(f, pi))
     assert(Riego.costoMovilidad(f, pi, d) == RiegoParalelo.costoMovilidadPar(f, pi, d))
-  }
-  //
-  @Test
-  def run(): Unit = {
-    (new RiegoParaleloTest).execute()
-
   }
 
 }

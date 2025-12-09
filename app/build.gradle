@@ -51,6 +51,10 @@ dependencies {
     testImplementation 'org.scalatest:scalatest_2.13:3.2.16'
     testImplementation 'org.scalatestplus:junit-4-13_2.13:3.2.2.0'
 
+    //Runner para ScalaTest con Junit Plataform
+    testRuntimeOnly 'org.junit.platform:junit-platform-engine:1.10.0'
+    testRuntimeOnly 'co.helmethair:scalatest-junit-runner:0.2.0'
+
     // Need scala-xml at test runtime
     testRuntimeOnly 'org.scala-lang.modules:scala-xml_2.13:1.2.0'
 }
@@ -59,6 +63,16 @@ dependencies {
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+// Configuracion para el test Runner
+test {
+    useJUnitPlatform {
+        includeEngines 'scalatest'
+        testLogging {
+            events "passed", "skipped", "failed", "standardOut", "standardError"
+        }
     }
 }
 
